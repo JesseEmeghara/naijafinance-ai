@@ -10,3 +10,4 @@ openai
 gtts
 python-dotenv
 mysql-connector-python
+gunicorn
