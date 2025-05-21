@@ -11,3 +11,5 @@ gtts
 python-dotenv
 mysql-connector-python
 gunicorn
+flask
+
