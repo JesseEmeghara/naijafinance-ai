@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify
-from chat.chat_interface import run_chat  # You’ll need to adapt this for web
+from chat.chat_interface import run_chat  # Ensure this returns text
 from agent.planner import generate_debt_plan
 from utils.db import save_user_profile, get_user_id_by_email, add_spending
+
+# 🌍 Load environment variables
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -52,7 +57,6 @@ def get_debt_plan():
     plan = generate_debt_plan(user_id, total_debt, income)
     return jsonify({"debt_plan": plan})
 
-# Optional: Chat endpoint (must adapt `run_chat()` to return text, not print)
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
@@ -60,10 +64,9 @@ def chat():
     user_id = get_user_id_by_email(email)
     
     message = data.get("message", "")
-    response = run_chat(user_id, message)  # You must adapt `run_chat()` to accept and return values
+    response = run_chat(user_id, message)  # Ensure `run_chat()` returns a string
     return jsonify({"response": response})
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
