@@ -1,16 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from chat.chat_interface import run_chat  # Ensure this returns text
+from chat.chat_interface import run_chat
 from agent.planner import generate_debt_plan
 from utils.db import save_user_profile, get_user_id_by_email, add_spending
 
-# 🌍 Load environment variables
+# 🌍 Load env variables
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # ✅ Enable CORS for all origins
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/')
 def home():
@@ -63,9 +63,10 @@ def get_debt_plan():
 def chat():
     data = request.json
     email = data.get("email")
-    message = data.get("message", "")
     user_id = get_user_id_by_email(email)
-    response = run_chat(user_id, message)  # Ensure `run_chat()` returns a string
+    
+    message = data.get("message", "")
+    response = run_chat(user_id, message)
     return jsonify({"response": response})
 
 if __name__ == "__main__":
