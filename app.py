@@ -1,9 +1,5 @@
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)  # ✅ Allow all origins for now (can restrict later)
-
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from chat.chat_interface import run_chat  # Ensure this returns text
 from agent.planner import generate_debt_plan
 from utils.db import save_user_profile, get_user_id_by_email, add_spending
@@ -14,6 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)  # ✅ Enable CORS for all origins
 
 @app.route('/')
 def home():
@@ -66,9 +63,8 @@ def get_debt_plan():
 def chat():
     data = request.json
     email = data.get("email")
-    user_id = get_user_id_by_email(email)
-    
     message = data.get("message", "")
+    user_id = get_user_id_by_email(email)
     response = run_chat(user_id, message)  # Ensure `run_chat()` returns a string
     return jsonify({"response": response})
 
