@@ -1,3 +1,8 @@
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # ✅ Allow all origins for now (can restrict later)
+
 from flask import Flask, request, jsonify
 from chat.chat_interface import run_chat  # Ensure this returns text
 from agent.planner import generate_debt_plan
